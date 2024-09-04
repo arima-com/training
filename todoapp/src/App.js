@@ -24,7 +24,8 @@ export class App {
         // 追加するTodoアイテムの要素（li要素）を作成
         // 完了済みであればchecked属性をつけ、未完了ならchecked属性を外す
         // input要素にはcheckboxクラスを付ける
-        const todoItemElement = item.completed ? element`<li><input type="checkbox" class="checkbox" checked><s>${item.title}</s></li>` : element`<li><input type="checkbox" class="checkbox">${item.title}</li>`;
+        // 削除ボタン（x）をそれぞれ追加
+        const todoItemElement = item.completed ? element`<li><input type="checkbox" class="checkbox" checked><s>${item.title}</s><button class="delete">x</button></li>` : element`<li><input type="checkbox" class="checkbox">${item.title}<button class="delete">x</button></li>`;
 
         // クラス名にcheckboxを持つ要素を取得
         const inputCheckboxElement = todoItemElement.querySelector(".checkbox");
@@ -35,6 +36,14 @@ export class App {
           this.#todoListModel.updateTodo({
             id: item.id,
             completed: !item.completed
+          });
+        });
+
+        // 削除ボタン（x）がクリックされたときにTodoListModelからアイテムを削除する
+        const deleteButtonElement = todoItemElement.querySelector(".delete");
+        deleteButtonElement.addEventListener("click", () => {
+          this.#todoListModel.deleteTodo({
+            id: item.id
           });
         });
 
