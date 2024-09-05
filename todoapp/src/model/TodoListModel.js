@@ -1,5 +1,4 @@
 import { EventEmitter } from "../EventEmitter.js";
-import { TodoItemModel } from "./TodoItemModel.js";
 
 export class TodoListModel extends EventEmitter {
   #items;
@@ -35,6 +34,14 @@ export class TodoListModel extends EventEmitter {
    */
   onChange(listener) {
     this.addEventListener("change", listener);
+  }
+
+  /**
+   * `onChange`で登録したリスナー関数を解除する
+   * @param {Function} listener
+   */
+  offChange(listener) {
+    this.removeEventListener("change", listener);
   }
 
   /**
