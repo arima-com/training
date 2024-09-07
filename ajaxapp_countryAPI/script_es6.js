@@ -52,6 +52,7 @@ const countriesContainer = document.querySelector(".countries");
       .then((data) => renderCountry(data, "neighbour"));
   };
 
-  //   getCountryDate("japan");
-  getCountryAndNeighborDate("usa");
+  btn.addEventListener("click", function () {
+    getCountryAndNeighborDate("usa");
+  });
 }
