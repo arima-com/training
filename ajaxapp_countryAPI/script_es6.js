@@ -28,6 +28,11 @@ const countriesContainer = document.querySelector(".countries");
     countriesContainer.style.opacity = 1;
   };
 
+  const renderError = function (message) {
+    countriesContainer.insertAdjacentText("beforeend", message);
+    countriesContainer.style.opacity = 1;
+  };
+
   const getCountryDate = function (country) {
     fetch(`https://restcountries.com/v2/name/${country}`)
       .then((response) => response.json())
@@ -37,10 +42,7 @@ const countriesContainer = document.querySelector(".countries");
   const getCountryAndNeighborDate = function (country) {
     // Country 1
     fetch(`https://restcountries.com/v2/name/${country}`)
-      .then(
-        (response) => response.json(),
-        (err) => alert(err)
-      )
+      .then((response) => response.json())
       .then((data) => {
         renderCountry(data[0]);
 
@@ -51,11 +53,12 @@ const countriesContainer = document.querySelector(".countries");
         // Country 2
         return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
       })
-      .then(
-        (response) => response.json(),
-        (err) => alert(err)
-      )
-      .then((data) => renderCountry(data, "neighbour"));
+      .then((response) => response.json())
+      .then((data) => renderCountry(data, "neighbour"))
+      .catch((err) => {
+        renderError(err.message);
+        console.error(`${err} 💥💥💥`);
+      });
   };
 
   btn.addEventListener("click", function () {
