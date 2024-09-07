@@ -18,14 +18,12 @@ const countriesContainer = document.querySelector(".countries");
     request.addEventListener("load", function () {
       const [data] = JSON.parse(this.responseText);
 
-      const html = createCountryHTML(data);
-      countriesContainer.insertAdjacentHTML("beforeend", html);
-      countriesContainer.style.opacity = 1;
+      renderCountry(data);
     });
   };
 
-  const createCountryHTML = function (data) {
-    return `
+  const renderCountry = function (data) {
+    const html = `
     <article class="country">
         <img class="country__img" src="${data.flag}" />
         <div class="country__data">
@@ -37,6 +35,8 @@ const countriesContainer = document.querySelector(".countries");
         </div>
     </article>
     `;
+    countriesContainer.insertAdjacentHTML("beforeend", html);
+    countriesContainer.style.opacity = 1;
   };
 
   getCountryDate("japan");
