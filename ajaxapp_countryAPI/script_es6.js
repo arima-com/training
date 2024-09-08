@@ -25,12 +25,10 @@ const countriesContainer = document.querySelector(".countries");
         </article>
         `;
     countriesContainer.insertAdjacentHTML("beforeend", html);
-    countriesContainer.style.opacity = 1;
   };
 
   const renderError = function (message) {
     countriesContainer.insertAdjacentText("beforeend", message);
-    countriesContainer.style.opacity = 1;
   };
 
   const getCountryDate = function (country) {
@@ -58,6 +56,9 @@ const countriesContainer = document.querySelector(".countries");
       .catch((err) => {
         renderError(err.message);
         console.error(`${err} 💥💥💥`);
+      })
+      .finally(() => {
+        countriesContainer.style.opacity = 1;
       });
   };
 
