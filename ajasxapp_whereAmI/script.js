@@ -9,12 +9,12 @@ const countriesContainer = document.querySelector(".countries");
   const whereAmI = function (lat, lng) {
     fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
       .then((request) => {
-        if (request.ok) throw new Error("Country no found");
         console.log(request);
+        if (!request.ok) throw new Error(`Problem with geocoding ${request.status}`);
         return request.json();
       })
       .then((data) => {
-        console.log(`You are in ${data.region}, ${data.country}`);
+        console.log(`You are in ${data.city}, ${data.country}`);
       })
       .catch((err) => {
         console.error(err.message);
