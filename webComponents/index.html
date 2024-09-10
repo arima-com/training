@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./hello-button.js"></script>
+    <script src="./time-formatted.js"></script>
+    <script src="./live-timer.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <time-formatted id="elem" year="numeric" month="long" day="numeric" minute="numeric" second="numeric" time-zone-name="short"></time-formatted> -->
+
+    <live-timer id="elem"></live-timer>
+
+    <button is="hello-button">click me</button>
+    <button is="hello-button" disabled>disabled</button>
+
+    <script>
+      // setInterval(() => elem.setAttribute('datetime', new Date()), 1000);
+      elem.addEventListener('tick', (event) => console.log(event.detail));
+    </script>
+  </body>
+</html>
