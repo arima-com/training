@@ -26,8 +26,12 @@ const countriesContainer = document.querySelector(".countries");
     countriesContainer.insertAdjacentText("beforeend", message);
   };
 
-  const whereAmI = function (lat, lng) {
-    fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+  const whereAmI = function () {
+    getPosition()
+      .then((pos) => {
+        const { latitude: lat, longitude: lng } = pos.coords;
+        return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+      })
       .then((request) => {
         if (!request.ok) throw new Error(`Problem with geocoding ${request.status}`);
         return request.json();
@@ -50,9 +54,15 @@ const countriesContainer = document.querySelector(".countries");
       });
   };
 
-  btn.addEventListener("click", function () {
-    whereAmI(52.508, 13.381);
-    whereAmI(19.037, 72.873);
-    whereAmI(-33.933, 18.474);
-  });
+  const getPosition = function () {
+    return new Promise(function (resolve, reject) {
+      // navigator.geolocation.getCurrentPosition(
+      //   (position) => console.log(position),
+      //   (err) => console.error(err)
+      // );
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  };
+
+  btn.addEventListener("click", whereAmI);
 }
