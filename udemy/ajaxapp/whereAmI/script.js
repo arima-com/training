@@ -66,3 +66,9 @@ const countriesContainer = document.querySelector(".countries");
 
   btn.addEventListener("click", whereAmI);
 }
+
+{
+  const whereAmI = async function (country) {
+    await fetch(`https://restcountries.com/v2/name/${country}`);
+  };
+}
