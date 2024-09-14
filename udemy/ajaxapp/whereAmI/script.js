@@ -68,7 +68,15 @@ const getPosition = function () {
 }
 
 {
-  const whereAmI = async function (country) {
-    await fetch(`https://restcountries.com/v2/name/${country}`);
+  const whereAmI = async function () {
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    const dataGeo = await resGeo.json();
+    console.log(dataGeo);
+    const res = await fetch(`https://restcountries.com/v2/name/${dataGeo.country}`);
+    const data = await res.json();
+    renderCountry(data[0]);
   };
+  whereAmI();
 }
