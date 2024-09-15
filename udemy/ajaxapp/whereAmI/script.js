@@ -97,3 +97,31 @@ const getPosition = function () {
   };
   whereAmI();
 }
+
+{
+  const getJSON = function (url, errorMessage = "Something went wrong") {
+    return fetch(url).then((response) => {
+      if (!response.ok) throw new Error(`${errorMessage} (${response.status})`);
+      return response.json();
+    });
+  };
+
+  const get3Countries = async function (c1, c2, c3) {
+    try {
+      // const data1 = await getJSON(`https://restcountries.com/v2/name/${c1}`);
+      // const data2 = await getJSON(`https://restcountries.com/v2/name/${c2}`);
+      // const data3 = await getJSON(`https://restcountries.com/v2/name/${c3}`);
+
+      const data = await Promise.all([getJSON(`https://restcountries.com/v2/name/${c1}`), getJSON(`https://restcountries.com/v2/name/${c2}`), getJSON(`https://restcountries.com/v2/name/${c3}`)]);
+
+      renderCountry(data[0][0]);
+      renderCountry(data[1][0]);
+      renderCountry(data[2][0]);
+      countriesContainer.style.opacity = 1;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  get3Countries("japan", "usa", "canada");
+}
