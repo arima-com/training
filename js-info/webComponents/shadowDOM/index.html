@@ -34,5 +34,34 @@
       <span slot="username">John Smith</span>
       <span slot="birthday">01.01.2001</span>
     </user-card>
+
+    <script>
+      customElements.define(
+        "user-card-primary",
+        class extends HTMLElement {
+          connectedCallback() {
+            `
+          <div>Name:
+            <slot name="username">Anyone</slot>
+          </div>
+          <div>Birthday:
+            <slot birthday="birthday">2020/01/01</slot>
+          </div>
+          <fieldset>
+            <legend>Other information</legend>
+            <slot></slot>
+          </fieldset>
+          `;
+          }
+        }
+      );
+    </script>
+
+    <user-card-primary>
+      <div>I like to swim.</div>
+      <span slot="username">John Smith</span>
+      <span slot="birthday">01.01.2001</span>
+      <div>... And play volleyball tool</div>
+    </user-card-primary>
   </body>
 </html>
