@@ -11,25 +11,6 @@
     <input type="range" name="" id="" />
     <show-hello name="John"></show-hello>
 
-    <script>
-      customElements.define(
-        "user-card",
-        class extends HTMLElement {
-          connectedCallback() {
-            this.attachShadow({ mode: open });
-            this.shadowRoot.innerHTML = `
-              <div>Name:
-                <slot name="username"></slot>
-              </div>
-              <div>Birthday:
-                <slot name="birthday"></slot>
-              </div>
-          `;
-          }
-        }
-      );
-    </script>
-
     <user-card>
       <span slot="username">John Smith</span>
       <span slot="birthday">01.01.2001</span>
@@ -63,5 +44,77 @@
       <span slot="birthday">01.01.2001</span>
       <div>... And play volleyball tool</div>
     </user-card-primary>
+
+    <custom-menu>
+      <span slot="title">Candy menu</span>
+      <li slot="item">Lollipon</li>
+      <li slot="item">Fruit Toast</li>
+      <li slot="item">Cup Cake</li>
+    </custom-menu>
+
+    <custom-menu id="menu">
+      <span slot="title">Cnady menu</span>
+    </custom-menu>
+
+    <template id="tmpl">
+      <style></style>
+      <div id="menu">
+        <slot name="title"></slot>
+        <ul>
+          <slot name="item"></slot>
+        </ul>
+      </div>
+    </template>
+
+    <script>
+      /*
+      customElements.define(
+        "custom-menu",
+        class extends HTMLElement {
+          connectedCallback() {
+            this.attachShadow({ mode: "open" });
+            this.shadowRoot.append(tmpl.content.cloneNode(true));
+
+            this.shadowRoot.querySelector('slot[name="title"]').onclick = () => {
+              this.shadowRoot.querySelector(".menu").classList.toggle("closed");
+            };
+          }
+        }
+      );
+      */
+
+      {
+        customElements.define(
+          "custome-menu",
+          class extends HTMLElement {
+            connectedCallback() {
+              this.attachShadow({ mode: "open" });
+              this.shadowRoot.innerHTML = `
+            <div class="menu">
+              <slot name="title"></slot>
+              <ul><slot name="item"></slot></ul>
+            </div>
+            `;
+
+              this.shadowRoot.firstElementChild.addEventListener("slotchange", (e) => {
+                let slot = e.target;
+                if (slot.name === "item") {
+                  this.items = slot.assignedElements().map((elem) => elem.textContent);
+                  alert(`Item: ${this.items}`);
+                }
+              });
+            }
+          }
+        );
+      }
+
+      setTimeout(() => {
+        menu.insertAdjacentHTML("beforeend", '<li slot="item">Lollipop</li>');
+      }, 1000);
+
+      setTimeout(() => {
+        menu.querySelector('[slot="title"]').innerHTML = "New menu";
+      }, 2000);
+    </script>
   </body>
 </html>
