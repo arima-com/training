@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      {
+        let user = {
+          name: "John",
+          money: 1000,
+
+          [Symbol.toPrimitive](hint) {
+            alert(`hint: ${hint}`);
+            return hint == "string" ? `{name: '${this.name}'}` : this.money;
+          },
+        };
+
+        alert(user); // hint: string // alertは文字列を期待するため、オブジェクトから文字列へ変換
+        alert(+user); // hint: number // 単行演算子プラスで数値を期待するため、オブジェクトから数値へ変換
+        alert(user + 500); // hint: default // 二項演算子
+      }
+
+      {
+        let user = {
+          name: "John",
+          money: 1000,
+
+          // hint = 'string'
+          toString() {
+            return `{name: '${this.name}'}`;
+          },
+
+          // hint = 'number'
+          valueOf() {
+            return this.money;
+          },
+        };
+
+        alert(user); // toString -> {name: "John"}
+        alert(+user); // valueOf -> 1000
+        alert(user + 500); // valueOf -> 1500
+      }
+    </script>
+  </body>
+</html>
