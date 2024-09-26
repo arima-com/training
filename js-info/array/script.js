@@ -54,3 +54,67 @@
   console.log(getMaxSubSum([1, 2, 3])); // 6
   console.log(getMaxSubSum([-1, -2, -3])); // 0
 }
+
+{
+  // https://ja.javascript.info/array-methods#ref-55
+  /**
+   * 拡張可能な計算機オブジェクトを作るコンストラクタ関数
+   */
+
+  function Calculator() {
+    let methods = {
+      "-": (a, b) => a - b,
+      "+": (a, b) => a + b
+    };
+
+    this.calculate = function (str) {
+      let split = str.split(" ");
+      let a = +split[0];
+      let op = split[1];
+      let b = +split[2];
+
+      if (!methods[op] || isNaN(a) || isNaN(b)) {
+        return NaN;
+      }
+      return methods[op](a, b);
+    };
+
+    this.addMethod = function (key, func) {
+      methods[key] = func;
+    };
+  }
+
+  let calc = new Calculator();
+  console.log(calc.calculate("3 + 7")); // 10
+
+  let powerCalc = new Calculator();
+  powerCalc.addMethod("*", (a, b) => a * b);
+  powerCalc.addMethod("/", (a, b) => a / b);
+  powerCalc.addMethod("**", (a, b) => a ** b);
+  let result = powerCalc.calculate("2 ** 3");
+  console.log(result); // 8
+}
+
+{
+  /**
+   * 配列のシャッフル
+   */
+
+  let arr = [1, 2, 3];
+
+  // easy but wrong way - Not the same probability
+  function badShuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+  }
+
+  badShuffle(arr);
+  console.log(arr);
+
+  // Fisher-Yates shuffle
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1)); // 0 から i までのランダムなインデックス
+      [array[i], array[j]] = [array[j], array[i]]; // 要素を入れ替える;
+    }
+  }
+}
