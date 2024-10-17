@@ -1,23 +1,30 @@
-import { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { GetServerSideProps, NextPage } from "next";
+import { useState } from "react";
+import styles from "./index.module.css";
 
-const IndexPage: NextPage = () => {
+// getServerSidePropsから渡されるpropsの型
+type Props = {
+  initialImageUrl: string;
+};
+
+// ページコンポーネント関数にpropsを受け取る引数を追加
+const IndexPage: NextPage<Props> = ({ initialImageUrl }) => {
   // useStateを使用して、imageUrl / loadingの状態を定義する
   /**
    * imageUrl: 画像のURL
    * loading: APIが呼び出し中かどうか
    */
-  const [imageUrl, setImageUrl] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [imageUrl, setImageUrl] = useState(initialImageUrl); // 初期値を渡す
+  const [loading, setLoading] = useState(false); // 初期状態はfalseにしておく
 
   // マウント時（コンポーネントがユーザーの画面に表示された時）に画像を読み込み宣言
   // useEffectには非同期関数直接渡すことができない
-  useEffect(() => {
-    fetchImage().then((newImage) => {
-      setImageUrl(newImage.url); // 画像URLの状態を更新する
-      setLoading(false); // ローディング状態を更新する
-    });
-  }, []); // []はコンポーネントがマウントされたときのみ実行
+  // useEffect(() => {
+  //   fetchImage().then((newImage) => {
+  //     setImageUrl(newImage.url); // 画像URLの状態を更新する
+  //     setLoading(false); // ローディング状態を更新する
+  //   });
+  // }, []); // []はコンポーネントがマウントされたときのみ実行
 
   // ボタンをクリックしたときに画像を読み込む処理
   const handleClick = async () => {
@@ -30,9 +37,11 @@ const IndexPage: NextPage = () => {
   // ローディング中でなければ画像を表示する
   // JSXの{}で囲ったブブにはJavaScriptの式だけがかける（文は書けない）
   return (
-    <div>
-      <button onClick={handleClick}>ほかのにゃんこもみる</button>
-      <div>{loading || <img src={imageUrl} />}</div>;
+    <div className={styles.page}>
+      <button onClick={handleClick} className={styles.button}>
+        ほかのにゃんこもみる
+      </button>
+      <div className={styles.frame}>{loading || <img src={imageUrl} className={styles.img} />}</div>;
     </div>
   );
 };
@@ -44,6 +53,16 @@ export default function IndexPage(): ReactElement<any, any> | null {
   return <div>猫画像予定地</div>
 }
 */
+
+// サーバーサイドで実行する処理
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  const image = await fetchImage();
+  return {
+    props: {
+      initialImageUrl: image.url
+    }
+  };
+};
 
 type Image = {
   url: string;
